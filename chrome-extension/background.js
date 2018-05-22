@@ -12,7 +12,7 @@ chrome.alarms.onAlarm.addListener(alarm => {
 		const scheduleId = alarmParams.get('scheduleId');
 		const scheduleTitle = alarmParams.get('title');
 		const scheduledTime = new Date(alarm.scheduledTime);
-		
+
 		// 5分以上経過していたら通知しない
 		if (Date.now() - alarm.scheduledTime >= MS_5_MINUTES) {
 			return;
@@ -47,9 +47,9 @@ chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) =
 		}) => {
 			if (scheduleCache) {
 				const scheduleId = notificationId;
-				
+
 				const schedule = Schedule.parse(scheduleCache.scheduleById[scheduleId]);
-				
+
 				const url = `${targetUrl}aqua/${schedule.resid}/view?target=${schedule.targetDate}`;
 				chrome.windows.create({
 					url,

@@ -1,8 +1,8 @@
 /* global Schedule */
 
 /**
- * 
- * @param {Date} date 
+ *
+ * @param {Date} date
  */
 const generateCalendarDateFormat = date => {
 	const yyyy = date.getFullYear();
@@ -12,8 +12,8 @@ const generateCalendarDateFormat = date => {
 };
 
 /**
- * 
- * @param {Date} date 
+ *
+ * @param {Date} date
  */
 const formatDate = date => {
 	return date.toLocaleString('ja-JP', {
@@ -25,8 +25,8 @@ const formatDate = date => {
 };
 
 /**
- * 
- * @param {Date} date 
+ *
+ * @param {Date} date
  */
 const formatDateTime = date => {
 	return date.toLocaleString('ja-JP', {
@@ -72,7 +72,7 @@ chrome.storage.local.get({
 				target.disabled = false;
 			});
 		});
-	
+
 		const fetchSchedule = () => {
 			const params = new URLSearchParams();
 			params.set('exa', 'calendar');
@@ -85,7 +85,7 @@ chrome.storage.local.get({
 			}).then(res => {
 				const contentType = res.headers.get('content-type');
 				if (contentType.startsWith('application/json')) {
-					return res.json(); 
+					return res.json();
 				}
 				// レスポンスがJSONでない
 				throw 'おそらくログインしてない';
@@ -136,11 +136,11 @@ chrome.storage.local.get({
 });
 
 /**
- * 
- * @param {object[]} dailySchedules 
+ *
+ * @param {object[]} dailySchedules
  * @param {string} dailySchedules[].date
  * @param {string[]} dailySchedules[].scheduleIds
- * @param {Object.<string, Schedule>} scheduleById 
+ * @param {Object.<string, Schedule>} scheduleById
  */
 const scheduleAlarms = (dailySchedules, scheduleById) => {
 	const MS_5_MINUTES = 1000 * 60 * 5;
@@ -175,11 +175,11 @@ const scheduleAlarms = (dailySchedules, scheduleById) => {
 
 
 /**
- * 
- * @param {object[]} dailySchedules 
+ *
+ * @param {object[]} dailySchedules
  * @param {string} dailySchedules[].date
  * @param {string[]} dailySchedules[].scheduleIds
- * @param {Object.<string, Schedule>} scheduleById 
+ * @param {Object.<string, Schedule>} scheduleById
  * @param {string} targetUrl
  * @param {number} lastModified
  */
@@ -197,7 +197,7 @@ const displayEvents = (dailySchedules, scheduleById, targetUrl, lastModified) =>
 		scheduleIds.forEach(scheduleId => {
 			const schedule = scheduleById[scheduleId];
 			const url = `${targetUrl}aqua/${schedule.resid}/view?target=${date}`;
-			
+
 			const p = document.createElement('p');
 			p.append(schedule.time);
 			p.append(': ');

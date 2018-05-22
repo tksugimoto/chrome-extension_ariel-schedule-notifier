@@ -1,7 +1,7 @@
 
 class Schedule {
 	/**
-	 * 
+	 *
 	 * @param {object} schedule - original schedule data
 	 */
 	constructor(schedule) {
@@ -30,7 +30,7 @@ class Schedule {
 	get id() {
 		if (this.isValid) {
 			const resid = this._originalData.record.resid;
-			const target = this._originalData.record.target;		
+			const target = this._originalData.record.target;
 			return `${resid}:${target}`;
 		}
 	}
