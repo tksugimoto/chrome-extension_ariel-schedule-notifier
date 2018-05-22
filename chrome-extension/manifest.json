@@ -1,0 +1,26 @@
+﻿{
+    "name": "Ariel予定通知",
+    "version": "0.1.0",
+    "manifest_version": 2,
+    "description": "",
+    "permissions": [
+        "alarms",
+        "storage",
+        "notifications"
+    ],
+    "optional_permissions": [
+        "http://*/",
+        "https://*/"
+    ],
+    "options_page": "setting/index.html",
+    "browser_action": {
+        "default_popup": "schedule/index.html"
+    },
+    "background": {
+        "persistent": false,
+        "scripts": [
+            "js/Schedule.js",
+            "background.js"
+        ]
+    }
+}

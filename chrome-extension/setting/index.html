@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<title>設定</title>
+	<style>
+		body {
+			font-size: 15px;
+			max-width: 700px;
+			margin: 0 auto;
+		}
+        [type="submit"] {
+            cursor: pointer;
+        }
+	</style>
+</head>
+<body>
+	<h1>
+		初期設定
+	</h1>
+    <form id="save_target_form">
+        <label>
+            対象URL
+            <input type="url" pattern="https?:.*" title="URLはhttpまたはhttpsで始まる必要があります" id="target_url" placeholder="http://ariel.intra.example.co.jp/" size="50" autocomplete="off" required>
+        </label>
+        <input type="submit" id="save_target" value="設定">
+    </form>
+	<script src="./main.js"></script>
+</body>
+</html>
