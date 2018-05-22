@@ -62,4 +62,4 @@ class Schedule {
 	get time() {
 		return this._originalData.time;
 	}
-};
+}
