@@ -37,11 +37,11 @@ const formatDateTime = date => {
  * @param {string} targetUrl
  * @param {number} lastModified
  */
-window.displayEvents = (dailySchedules, scheduleById, targetUrl, lastModified) => {
-	const lastModifiedElement = document.getElementById('lastModified');
+window.displayEvents = (dailySchedules, scheduleById, targetUrl, lastModified, option = {}) => {
+	const lastModifiedElement = document.getElementById(option.lastModifiedElementId || 'lastModified');
 	lastModifiedElement.innerText = `取得日: ${formatDateTime(new Date(lastModified))}`;
 
-	const container = document.getElementById('schedule_container');
+	const container = document.getElementById(option.containerElementId || 'schedule_container');
 	container.innerText = '';
 
 	dailySchedules.forEach(({date, scheduleIds}) => {
