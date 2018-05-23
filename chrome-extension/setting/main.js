@@ -1,3 +1,4 @@
+/* global fetchSchedule displayEvents */
 
 const targetUrlInput = document.getElementById('target_url');
 
@@ -38,6 +39,13 @@ document.getElementById('save_target_form').addEventListener('submit', evt => {
 					[targetUrlSettingStorageKey]: targetUrl.href,
 				}, () => {
 					outputMessage('設定完了');
+
+					fetchSchedule(targetUrl).then(scheduleCache => {
+						displayEvents(scheduleCache.dailySchedules, scheduleCache.scheduleById, targetUrl, scheduleCache.lastModified);
+					}).catch(err => {
+						console.error(err);
+						outputMessage(`設定完了\n予定の取得に失敗しました（${err}）`);
+					});
 				});
 			} else {
 				outputMessage('設定失敗');
