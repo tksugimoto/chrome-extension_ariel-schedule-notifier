@@ -1,15 +1,4 @@
-/* global Schedule */
-
-/**
- *
- * @param {Date} date
- */
-const generateCalendarDateFormat = date => {
-	const yyyy = date.getFullYear();
-	const mm = String(date.getMonth() + 1).padStart(2, '0');
-	const dd = String(date.getDate()).padStart(2, '0');
-	return `${yyyy}-${mm}-${dd}`;
-};
+/* global Schedule fetchSchedule */
 
 /**
  *
@@ -63,7 +52,7 @@ chrome.storage.local.get({
 			target.disabled = true;
 			document.getElementById('message').innerText = '';
 
-			fetchSchedule().then(scheduleCache => {
+			fetchSchedule(targetUrl).then(scheduleCache => {
 				displayEvents(scheduleCache.dailySchedules, scheduleCache.scheduleById, targetUrl, scheduleCache.lastModified);
 			}).catch(err => {
 				console.error(err);
@@ -72,106 +61,8 @@ chrome.storage.local.get({
 				target.disabled = false;
 			});
 		});
-
-		const fetchSchedule = () => {
-			const params = new URLSearchParams();
-			params.set('exa', 'calendar');
-			params.set('viewId', 'schedule-list/to-json');
-			params.set('start', generateCalendarDateFormat(new Date()));
-			params.toString();
-
-			return fetch(`${targetUrl}aqua/0/schedule/view?${params.toString()}`, {
-				credentials: 'include',
-			}).then(res => {
-				const contentType = res.headers.get('content-type');
-				if (contentType.startsWith('application/json')) {
-					return res.json();
-				}
-				// レスポンスがJSONでない
-				throw 'おそらくログインしてない';
-			}).then(json => {
-				const scheduleById = {};
-				for (const event of Object.values(json.events)) {
-					for (const s of event.schedules) {
-						const schedule = new Schedule(s);
-						if (schedule.isValid) {
-							scheduleById[schedule.id] = schedule;
-						}
-					}
-				}
-
-				const dailySchedules = Object.entries(json.events).sort(([date1], [date2]) => {
-					if (date1 > date2) return 1;
-					if (date1 < date2) return -1;
-					return 0;
-				}).map(([date, {schedules}]) => {
-					const scheduleIds = schedules.map(s => new Schedule(s)).filter(schedule => schedule.isValid).map(schedule => schedule.id);
-					return {
-						date,
-						scheduleIds,
-					};
-				});
-
-				return {
-					dailySchedules,
-					scheduleById,
-				};
-			}).then(({dailySchedules, scheduleById}) => {
-				const scheduleCache = {
-					dailySchedules,
-					scheduleById,
-					lastModified: Date.now(),
-				};
-
-				chrome.storage.local.set({
-					scheduleCache,
-				});
-
-				scheduleAlarms(dailySchedules, scheduleById);
-
-				return scheduleCache;
-			});
-		};
 	}
 });
-
-/**
- *
- * @param {object[]} dailySchedules
- * @param {string} dailySchedules[].date
- * @param {string[]} dailySchedules[].scheduleIds
- * @param {Object.<string, Schedule>} scheduleById
- */
-const scheduleAlarms = (dailySchedules, scheduleById) => {
-	const MS_5_MINUTES = 1000 * 60 * 5;
-
-	chrome.alarms.clearAll(() => {
-		dailySchedules.forEach(({date, scheduleIds}) => {
-			scheduleIds.forEach(scheduleId => {
-				const schedule = scheduleById[scheduleId];
-
-				if (schedule.time.match(/^(\d+:\d+) -/)) {
-					const startTime = RegExp.$1;
-					const eventStartDate = new Date(`${date} ${startTime}`);
-
-					const when = eventStartDate.getTime() - MS_5_MINUTES;
-
-					if (when > Date.now()) {
-						const alarmParams = new URLSearchParams();
-						alarmParams.set('type', 'schedule');
-						alarmParams.set('date', date);
-						alarmParams.set('scheduleId', scheduleId);
-						alarmParams.set('title', schedule.title);
-
-						chrome.alarms.create(alarmParams.toString(), {
-							when,
-						});
-					}
-				}
-			});
-		});
-	});
-};
 
 
 /**
