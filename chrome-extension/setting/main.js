@@ -15,10 +15,18 @@ chrome.storage.local.get({
 	targetUrlInput.value = items[targetUrlSettingStorageKey];
 });
 
+const outputMessage = (() => {
+	const messageElement = document.getElementById('message');
+	return (message) => {
+		messageElement.innerText = message;
+	};
+})();
+
 document.getElementById('save_target_form').addEventListener('submit', evt => {
 	evt.preventDefault();
 	const targetUrl = new URL(targetUrlInput.value);
 	if (allowedProtocols.includes(targetUrl.protocol)) {
+		outputMessage('');
 		// TODO: 前回許可したoriginをremove
 		chrome.permissions.request({
 			origins: [
@@ -28,7 +36,11 @@ document.getElementById('save_target_form').addEventListener('submit', evt => {
 			if (granted) {
 				chrome.storage.local.set({
 					[targetUrlSettingStorageKey]: targetUrl.href,
+				}, () => {
+					outputMessage('設定完了');
 				});
+			} else {
+				outputMessage('設定失敗');
 			}
 		});
 	}
