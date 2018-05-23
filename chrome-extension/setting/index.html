@@ -12,6 +12,13 @@
 		[type="submit"] {
 			cursor: pointer;
 		}
+		#schedule_container {
+			border: gray 2px solid;
+			padding: 0 10px;
+		}
+		#schedule_container:empty {
+			border: none;
+		}
 	</style>
 </head>
 <body>
@@ -25,6 +32,13 @@
 		</label>
 		<input type="submit" id="save_target" value="設定">
 	</form>
+	<p id="message"></p>
+	<p id="lastModified"></p>
+	<div id="schedule_container"></div>
+	<script src="/js/displayEvents.js"></script>
+	<script src="/js/fetchSchedule.js"></script>
+	<script src="/js/Schedule.js"></script>
+	<script src="/js/scheduleAlarms.js"></script>
 	<script src="./main.js"></script>
 </body>
 </html>
