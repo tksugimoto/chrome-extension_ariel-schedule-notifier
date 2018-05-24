@@ -22,6 +22,7 @@ chrome.alarms.onAlarm.addListener(alarm => {
 				message: scheduledTime.toLocaleString(),
 				type: 'basic',
 				iconUrl: '/icon/icon.png',
+				requireInteraction: true,
 				buttons: [{
 					title: '予定を開く',
 				}],
