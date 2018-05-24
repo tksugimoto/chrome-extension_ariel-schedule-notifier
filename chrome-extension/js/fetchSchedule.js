@@ -1,4 +1,4 @@
-/* global Schedule scheduleAlarms */
+/* global Schedule AlarmUtil */
 
 /**
  *
@@ -68,7 +68,7 @@ window.fetchSchedule = (targetUrl) => {
 			scheduleCache,
 		});
 
-		scheduleAlarms(dailySchedules, scheduleById);
+		AlarmUtil.scheduleAlarms(dailySchedules, scheduleById);
 
 		return scheduleCache;
 	});

@@ -1,4 +1,3 @@
-
 /**
  *
  * @param {object[]} dailySchedules
@@ -6,7 +5,7 @@
  * @param {string[]} dailySchedules[].scheduleIds
  * @param {Object.<string, Schedule>} scheduleById
  */
-window.scheduleAlarms = (dailySchedules, scheduleById) => {
+const scheduleAlarms = (dailySchedules, scheduleById) => {
 	const MS_5_MINUTES = 1000 * 60 * 5;
 
 	chrome.alarms.clearAll(() => {
@@ -35,4 +34,8 @@ window.scheduleAlarms = (dailySchedules, scheduleById) => {
 			});
 		});
 	});
+};
+
+window.AlarmUtil = {
+	scheduleAlarms,
 };
