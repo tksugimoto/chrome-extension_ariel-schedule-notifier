@@ -62,4 +62,13 @@ class Schedule {
 	get time() {
 		return this._originalData.time;
 	}
+
+	/**
+	 * @param {string} targetLabel
+	 * @returns {string} result
+	 */
+	findFromOptions(targetLabel) {
+		const resultOption = this._originalData.options.find(({label}) => label === targetLabel);
+		return resultOption ? resultOption.value : null;
+	}
 }
