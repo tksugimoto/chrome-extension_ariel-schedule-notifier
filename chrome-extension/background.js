@@ -10,22 +10,30 @@ chrome.alarms.onAlarm.addListener(alarm => {
 	const alarmParams = new URLSearchParams(alarm.name);
 	if (alarmParams.get('type') === 'schedule') {
 		const scheduleId = alarmParams.get('scheduleId');
-		const scheduleTitle = alarmParams.get('title');
-		const scheduledTime = new Date(alarm.scheduledTime);
 
 		// 5分以上経過していたら通知しない
 		if (Date.now() - alarm.scheduledTime >= MS_5_MINUTES) {
 			return;
 		} else {
-			chrome.notifications.create(scheduleId, {
-				title: scheduleTitle,
-				message: scheduledTime.toLocaleString(),
-				type: 'basic',
-				iconUrl: '/icon/icon.png',
-				requireInteraction: true,
-				buttons: [{
-					title: '予定を開く',
-				}],
+			chrome.storage.local.get([
+				'scheduleCache',
+			], ({
+				scheduleCache,
+			}) => {
+				if (scheduleCache) {
+					const schedule = Schedule.parse(scheduleCache.scheduleById[scheduleId]);
+
+					chrome.notifications.create(scheduleId, {
+						title: schedule.title,
+						message: schedule.time,
+						type: 'basic',
+						iconUrl: '/icon/icon.png',
+						requireInteraction: true,
+						buttons: [{
+							title: '予定を開く',
+						}],
+					});
+				}
 			});
 		}
 	}
