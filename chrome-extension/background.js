@@ -22,10 +22,12 @@ chrome.alarms.onAlarm.addListener(alarm => {
 			}) => {
 				if (scheduleCache) {
 					const schedule = Schedule.parse(scheduleCache.scheduleById[scheduleId]);
+					const facility = schedule.findFromOptions('施設');
 
 					chrome.notifications.create(scheduleId, {
 						title: schedule.title,
-						message: schedule.time,
+						message: facility || '',
+						contextMessage: schedule.time,
 						type: 'basic',
 						iconUrl: '/icon/icon.png',
 						requireInteraction: true,
