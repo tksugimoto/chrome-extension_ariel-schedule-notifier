@@ -22,9 +22,7 @@ const scheduleAlarms = (dailySchedules, scheduleById) => {
 					if (when > Date.now()) {
 						const alarmParams = new URLSearchParams();
 						alarmParams.set('type', 'schedule');
-						alarmParams.set('date', date);
 						alarmParams.set('scheduleId', scheduleId);
-						alarmParams.set('title', schedule.title);
 
 						chrome.alarms.create(alarmParams.toString(), {
 							when,
