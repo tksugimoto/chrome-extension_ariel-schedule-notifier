@@ -1,4 +1,31 @@
 /**
+ * @param {object} alarm
+ * @param {string} alarm.name
+ * @returns {Promise}
+ */
+const clearAlarm = alarm => {
+	return new Promise(resolve => {
+		chrome.alarms.clear(alarm.name, resolve);
+	});
+};
+
+/**
+ * @returns {Promise}
+ */
+const clearScheduleAlarms = () => {
+	return new Promise(resolve => {
+		chrome.alarms.getAll(alarms => {
+			const scheduleAlarms = alarms.filter(alarm => {
+				const alarmParams = new URLSearchParams(alarm.name);
+				return alarmParams.get('type') === 'schedule';
+			});
+			const promises = scheduleAlarms.map(clearAlarm);
+			return Promise.all(promises).then(resolve);
+		});
+	});
+};
+
+/**
  *
  * @param {object[]} dailySchedules
  * @param {string} dailySchedules[].date
@@ -8,7 +35,7 @@
 const createScheduleAlarms = (dailySchedules, scheduleById) => {
 	const MS_5_MINUTES = 1000 * 60 * 5;
 
-	chrome.alarms.clearAll(() => {
+	clearScheduleAlarms().then(() => {
 		dailySchedules.forEach(({date, scheduleIds}) => {
 			scheduleIds.forEach(scheduleId => {
 				const schedule = scheduleById[scheduleId];
