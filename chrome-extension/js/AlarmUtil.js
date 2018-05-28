@@ -36,6 +36,22 @@ const scheduleAlarms = (dailySchedules, scheduleById) => {
 	});
 };
 
+const onScheduleAlarm = {
+	addListener: callback => {
+		chrome.alarms.onAlarm.addListener(alarm => {
+			const alarmParams = new URLSearchParams(alarm.name);
+			if (alarmParams.get('type') === 'schedule') {
+				const scheduleId = alarmParams.get('scheduleId');
+				callback({
+					scheduleId,
+					scheduledTime: alarm.scheduledTime,
+				});
+			}
+		});
+	},
+};
+
 window.AlarmUtil = {
 	scheduleAlarms,
+	onScheduleAlarm,
 };
