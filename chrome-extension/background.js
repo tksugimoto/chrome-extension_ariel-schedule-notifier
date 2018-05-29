@@ -1,4 +1,4 @@
-/* global Schedule */
+/* global Schedule AlarmUtil */
 
 const ButtonIndex = {
 	OPEN_SCHEDULE: 0,
@@ -6,38 +6,35 @@ const ButtonIndex = {
 
 const MS_5_MINUTES = 1000 * 60 * 5;
 
-chrome.alarms.onAlarm.addListener(alarm => {
-	const alarmParams = new URLSearchParams(alarm.name);
-	if (alarmParams.get('type') === 'schedule') {
-		const scheduleId = alarmParams.get('scheduleId');
+AlarmUtil.onScheduleAlarm.addListener(alarm => {
+	const scheduleId = alarm.scheduleId;
 
-		// 5分以上経過していたら通知しない
-		if (Date.now() - alarm.scheduledTime >= MS_5_MINUTES) {
-			return;
-		} else {
-			chrome.storage.local.get([
-				'scheduleCache',
-			], ({
-				scheduleCache,
-			}) => {
-				if (scheduleCache) {
-					const schedule = Schedule.parse(scheduleCache.scheduleById[scheduleId]);
-					const facility = schedule.findFromOptions('施設');
+	// 5分以上経過していたら通知しない
+	if (Date.now() - alarm.scheduledTime >= MS_5_MINUTES) {
+		return;
+	} else {
+		chrome.storage.local.get([
+			'scheduleCache',
+		], ({
+			scheduleCache,
+		}) => {
+			if (scheduleCache) {
+				const schedule = Schedule.parse(scheduleCache.scheduleById[scheduleId]);
+				const facility = schedule.findFromOptions('施設');
 
-					chrome.notifications.create(scheduleId, {
-						title: schedule.title,
-						message: facility || '',
-						contextMessage: schedule.time,
-						type: 'basic',
-						iconUrl: '/icon/icon.png',
-						requireInteraction: true,
-						buttons: [{
-							title: '予定を開く',
-						}],
-					});
-				}
-			});
-		}
+				chrome.notifications.create(scheduleId, {
+					title: schedule.title,
+					message: facility || '',
+					contextMessage: schedule.time,
+					type: 'basic',
+					iconUrl: '/icon/icon.png',
+					requireInteraction: true,
+					buttons: [{
+						title: '予定を開く',
+					}],
+				});
+			}
+		});
 	}
 });
 

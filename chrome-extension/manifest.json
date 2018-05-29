@@ -22,6 +22,7 @@
 	"background": {
 		"persistent": false,
 		"scripts": [
+			"js/AlarmUtil.js",
 			"js/Schedule.js",
 			"background.js"
 		]
