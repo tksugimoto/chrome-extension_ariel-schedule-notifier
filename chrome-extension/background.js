@@ -1,4 +1,4 @@
-/* global Schedule AlarmUtil */
+/* global Schedule AlarmUtil fetchSchedule */
 
 const ButtonIndex = {
 	OPEN_SCHEDULE: 0,
@@ -70,7 +70,24 @@ chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) =
 	}
 });
 
+AlarmUtil.onRefreshScheduleTimer.addListener(() => {
+	const targetUrlSettingStorageKey = 'target_url';
+	chrome.storage.local.get({
+		[targetUrlSettingStorageKey]: '',
+	}, items => {
+		const targetUrl = items[targetUrlSettingStorageKey];
+
+		if (targetUrl) {
+			fetchSchedule(targetUrl).catch(err => {
+				console.error(err);
+			});
+		}
+	});
+});
+
 chrome.runtime.onInstalled.addListener(details => {
+	AlarmUtil.startRefreshScheduleTimer();
+
 	if (details.reason === 'install') {
 		chrome.runtime.openOptionsPage();
 	}

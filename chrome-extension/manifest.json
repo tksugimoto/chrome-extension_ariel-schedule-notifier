@@ -23,6 +23,7 @@
 		"persistent": false,
 		"scripts": [
 			"js/AlarmUtil.js",
+			"js/fetchSchedule.js",
 			"js/Schedule.js",
 			"background.js"
 		]

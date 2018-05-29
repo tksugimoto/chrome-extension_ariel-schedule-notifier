@@ -76,7 +76,30 @@ const onScheduleAlarm = {
 	},
 };
 
+const startRefreshScheduleTimer = () => {
+	const alarmParams = new URLSearchParams();
+	alarmParams.set('type', 'refresh-schedule');
+
+	chrome.alarms.create(alarmParams.toString(), {
+		periodInMinutes: 60 * 1,
+	});
+};
+
+
+const onRefreshScheduleTimer = {
+	addListener: callback => {
+		chrome.alarms.onAlarm.addListener(alarm => {
+			const alarmParams = new URLSearchParams(alarm.name);
+			if (alarmParams.get('type') === 'refresh-schedule') {
+				callback();
+			}
+		});
+	},
+};
+
 window.AlarmUtil = {
 	createScheduleAlarms,
 	onScheduleAlarm,
+	startRefreshScheduleTimer,
+	onRefreshScheduleTimer,
 };
