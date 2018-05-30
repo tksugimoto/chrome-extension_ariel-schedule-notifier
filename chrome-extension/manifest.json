@@ -2,9 +2,10 @@
 	"name": "Ariel予定通知",
 	"version": "0.3.0",
 	"manifest_version": 2,
-	"description": "",
+	"description": "Ariel Air One Enterpriseの予定の開催時刻が近くなったら通知する",
 	"icons": {
-		"128": "/icon/icon.png"
+		"48": "/icon/icon48.png",
+		"128": "/icon/icon128.png"
 	},
 	"permissions": [
 		"alarms",
