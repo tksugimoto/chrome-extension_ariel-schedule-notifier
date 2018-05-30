@@ -27,7 +27,7 @@ AlarmUtil.onScheduleAlarm.addListener(alarm => {
 					message: facility || '',
 					contextMessage: schedule.time,
 					type: 'basic',
-					iconUrl: '/icon/icon.png',
+					iconUrl: '/icon/icon128.png',
 					requireInteraction: true,
 					buttons: [{
 						title: '予定を開く',
