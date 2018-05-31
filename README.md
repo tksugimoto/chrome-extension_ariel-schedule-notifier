@@ -1,5 +1,19 @@
 # Arielの予定を通知するChrome拡張
 
+## 機能
+* 予定の開始時刻に近くなったらChromeのデスクトップ通知機能で通知する
+	![通知の表示例](./docs/images/sample-notification-01.png)
+	* 現在の通知時刻は予定開始時刻の5分前（固定）
+* 定期的に予定一覧を取得し通知予約を更新する
+	* 現在の更新間隔は1時間（固定）
+
+## 設定
+### 初期設定（必須）
+* 対象URL
+	* 例) http://ariel.intra.example.co.jp/
+	* 設定時に対象URLへのアクセスを要求されるので許可してください
+		![権限要求の表示例](./docs/images/permission-confirmation.png)
+
 ## TODO
 * 通知時刻設定
 	* 何分前に通知するか（現在5分固定）
