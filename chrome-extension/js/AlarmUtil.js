@@ -76,7 +76,7 @@ const onScheduleNotificationAlarm = {
 	},
 };
 
-const startRefreshScheduleTimer = () => {
+const startRefreshScheduleAlarm = () => {
 	const alarmParams = new URLSearchParams();
 	alarmParams.set('type', 'refresh-schedule');
 
@@ -86,7 +86,7 @@ const startRefreshScheduleTimer = () => {
 };
 
 
-const onRefreshScheduleTimer = {
+const onRefreshScheduleAlarm = {
 	addListener: callback => {
 		chrome.alarms.onAlarm.addListener(alarm => {
 			const alarmParams = new URLSearchParams(alarm.name);
@@ -100,6 +100,6 @@ const onRefreshScheduleTimer = {
 window.AlarmUtil = {
 	refreshScheduleNotificationAlarms,
 	onScheduleNotificationAlarm,
-	startRefreshScheduleTimer,
-	onRefreshScheduleTimer,
+	startRefreshScheduleAlarm,
+	onRefreshScheduleAlarm,
 };

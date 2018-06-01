@@ -70,7 +70,7 @@ chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) =
 	}
 });
 
-AlarmUtil.onRefreshScheduleTimer.addListener(() => {
+AlarmUtil.onRefreshScheduleAlarm.addListener(() => {
 	const targetUrlSettingStorageKey = 'target_url';
 	chrome.storage.local.get({
 		[targetUrlSettingStorageKey]: '',
@@ -86,7 +86,7 @@ AlarmUtil.onRefreshScheduleTimer.addListener(() => {
 });
 
 chrome.runtime.onInstalled.addListener(details => {
-	AlarmUtil.startRefreshScheduleTimer();
+	AlarmUtil.startRefreshScheduleAlarm();
 
 	if (details.reason === 'install') {
 		chrome.runtime.openOptionsPage();
