@@ -61,7 +61,7 @@ const refreshScheduleNotificationAlarms = (dailySchedules, scheduleById) => {
 	});
 };
 
-const onScheduleAlarm = {
+const onScheduleNotificationAlarm = {
 	addListener: callback => {
 		chrome.alarms.onAlarm.addListener(alarm => {
 			const alarmParams = new URLSearchParams(alarm.name);
@@ -99,7 +99,7 @@ const onRefreshScheduleTimer = {
 
 window.AlarmUtil = {
 	refreshScheduleNotificationAlarms,
-	onScheduleAlarm,
+	onScheduleNotificationAlarm,
 	startRefreshScheduleTimer,
 	onRefreshScheduleTimer,
 };

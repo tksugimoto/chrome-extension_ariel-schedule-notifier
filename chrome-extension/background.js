@@ -6,7 +6,7 @@ const ButtonIndex = {
 
 const MS_5_MINUTES = 1000 * 60 * 5;
 
-AlarmUtil.onScheduleAlarm.addListener(alarm => {
+AlarmUtil.onScheduleNotificationAlarm.addListener(alarm => {
 	const scheduleId = alarm.scheduleId;
 
 	// 5分以上経過していたら通知しない
