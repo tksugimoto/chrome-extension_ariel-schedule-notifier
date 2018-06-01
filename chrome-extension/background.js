@@ -33,12 +33,22 @@ AlarmUtil.onScheduleNotificationAlarm.addListener(alarm => {
 						title: '予定を開く',
 					}],
 				});
+
+				// 10分後に通知を削除する
+				// TODO: 通知時刻ではなく予定開始時刻をベースに通知削除時刻を決定
+				AlarmUtil.startClearScheduleNotificationAlarm(schedule, alarm.scheduledTime + 1000 * 60 * 10);
 			}
 		});
 	}
 });
 
 chrome.notifications.onClicked.addListener(notificationId => {
+	chrome.notifications.clear(notificationId);
+});
+
+AlarmUtil.onClearScheduleNotificationAlarm.addListener(({
+	scheduleId: notificationId,
+}) => {
 	chrome.notifications.clear(notificationId);
 });
 

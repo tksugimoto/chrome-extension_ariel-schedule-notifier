@@ -97,9 +97,41 @@ const onRefreshScheduleAlarm = {
 	},
 };
 
+
+/**
+ * @param {Schedule} schedule
+ * @param {number} when the time value in milliseconds
+ */
+const startClearScheduleNotificationAlarm = (schedule, when) => {
+	const alarmParams = new URLSearchParams();
+	alarmParams.set('type', 'clear-schedule-notification');
+	alarmParams.set('scheduleId', schedule.id);
+
+	chrome.alarms.create(alarmParams.toString(), {
+		when,
+	});
+};
+
+const onClearScheduleNotificationAlarm = {
+	addListener: callback => {
+		chrome.alarms.onAlarm.addListener(alarm => {
+			const alarmParams = new URLSearchParams(alarm.name);
+			if (alarmParams.get('type') === 'clear-schedule-notification') {
+				const scheduleId = alarmParams.get('scheduleId');
+				callback({
+					scheduleId,
+				});
+			}
+		});
+	},
+};
+
+
 window.AlarmUtil = {
 	refreshScheduleNotificationAlarms,
 	onScheduleNotificationAlarm,
 	startRefreshScheduleAlarm,
 	onRefreshScheduleAlarm,
+	startClearScheduleNotificationAlarm,
+	onClearScheduleNotificationAlarm,
 };
