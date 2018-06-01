@@ -32,7 +32,7 @@ const clearScheduleAlarms = () => {
  * @param {string[]} dailySchedules[].scheduleIds
  * @param {Object.<string, Schedule>} scheduleById
  */
-const createScheduleAlarms = (dailySchedules, scheduleById) => {
+const refreshScheduleNotificationAlarms = (dailySchedules, scheduleById) => {
 	const MS_5_MINUTES = 1000 * 60 * 5;
 
 	clearScheduleAlarms().then(() => {
@@ -98,7 +98,7 @@ const onRefreshScheduleTimer = {
 };
 
 window.AlarmUtil = {
-	createScheduleAlarms,
+	refreshScheduleNotificationAlarms,
 	onScheduleAlarm,
 	startRefreshScheduleTimer,
 	onRefreshScheduleTimer,
