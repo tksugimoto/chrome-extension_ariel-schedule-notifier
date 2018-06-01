@@ -12,7 +12,7 @@ const clearAlarm = alarm => {
 /**
  * @returns {Promise}
  */
-const clearScheduleAlarms = () => {
+const clearScheduleNotificationAlarms = () => {
 	return new Promise(resolve => {
 		chrome.alarms.getAll(alarms => {
 			const scheduleAlarms = alarms.filter(alarm => {
@@ -35,7 +35,7 @@ const clearScheduleAlarms = () => {
 const refreshScheduleNotificationAlarms = (dailySchedules, scheduleById) => {
 	const MS_5_MINUTES = 1000 * 60 * 5;
 
-	clearScheduleAlarms().then(() => {
+	clearScheduleNotificationAlarms().then(() => {
 		dailySchedules.forEach(({date, scheduleIds}) => {
 			scheduleIds.forEach(scheduleId => {
 				const schedule = scheduleById[scheduleId];
