@@ -12,7 +12,7 @@ const clearAlarm = alarm => {
 /**
  * @returns {Promise}
  */
-const clearScheduleAlarms = () => {
+const clearScheduleNotificationAlarms = () => {
 	return new Promise(resolve => {
 		chrome.alarms.getAll(alarms => {
 			const scheduleAlarms = alarms.filter(alarm => {
@@ -32,10 +32,10 @@ const clearScheduleAlarms = () => {
  * @param {string[]} dailySchedules[].scheduleIds
  * @param {Object.<string, Schedule>} scheduleById
  */
-const createScheduleAlarms = (dailySchedules, scheduleById) => {
+const refreshScheduleNotificationAlarms = (dailySchedules, scheduleById) => {
 	const MS_5_MINUTES = 1000 * 60 * 5;
 
-	clearScheduleAlarms().then(() => {
+	clearScheduleNotificationAlarms().then(() => {
 		dailySchedules.forEach(({date, scheduleIds}) => {
 			scheduleIds.forEach(scheduleId => {
 				const schedule = scheduleById[scheduleId];
@@ -61,7 +61,7 @@ const createScheduleAlarms = (dailySchedules, scheduleById) => {
 	});
 };
 
-const onScheduleAlarm = {
+const onScheduleNotificationAlarm = {
 	addListener: callback => {
 		chrome.alarms.onAlarm.addListener(alarm => {
 			const alarmParams = new URLSearchParams(alarm.name);
@@ -76,7 +76,7 @@ const onScheduleAlarm = {
 	},
 };
 
-const startRefreshScheduleTimer = () => {
+const startRefreshScheduleAlarm = () => {
 	const alarmParams = new URLSearchParams();
 	alarmParams.set('type', 'refresh-schedule');
 
@@ -86,7 +86,7 @@ const startRefreshScheduleTimer = () => {
 };
 
 
-const onRefreshScheduleTimer = {
+const onRefreshScheduleAlarm = {
 	addListener: callback => {
 		chrome.alarms.onAlarm.addListener(alarm => {
 			const alarmParams = new URLSearchParams(alarm.name);
@@ -98,8 +98,8 @@ const onRefreshScheduleTimer = {
 };
 
 window.AlarmUtil = {
-	createScheduleAlarms,
-	onScheduleAlarm,
-	startRefreshScheduleTimer,
-	onRefreshScheduleTimer,
+	refreshScheduleNotificationAlarms,
+	onScheduleNotificationAlarm,
+	startRefreshScheduleAlarm,
+	onRefreshScheduleAlarm,
 };

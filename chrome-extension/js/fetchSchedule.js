@@ -68,7 +68,7 @@ window.fetchSchedule = (targetUrl) => {
 			scheduleCache,
 		});
 
-		AlarmUtil.createScheduleAlarms(dailySchedules, scheduleById);
+		AlarmUtil.refreshScheduleNotificationAlarms(dailySchedules, scheduleById);
 
 		return scheduleCache;
 	});
