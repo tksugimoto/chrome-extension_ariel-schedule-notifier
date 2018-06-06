@@ -60,6 +60,13 @@ window.displayEvents = (dailySchedules, scheduleById, targetUrl, lastModified, o
 			link.href = url;
 			link.target = '_blank';
 			p.append(link);
+
+			const facility = schedule.findFromOptions('施設');
+			if (facility) {
+				p.append(document.createElement('br'));
+				p.append(`施設: ${facility}`);
+			}
+
 			container.append(p);
 
 			link.addEventListener('click', evt => {
