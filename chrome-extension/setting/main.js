@@ -41,6 +41,7 @@ document.getElementById('save_target_form').addEventListener('submit', evt => {
 					outputMessage('設定完了');
 
 					fetchSchedule(targetUrl).then(scheduleCache => {
+						outputMessage('設定完了\n（別ユーザーの予定が表示される場合は、スケジュールアプリの先頭ユーザーを自分にしてください）');
 						displayEvents(scheduleCache.dailySchedules, scheduleCache.scheduleById, targetUrl, scheduleCache.lastModified);
 					}).catch(err => {
 						console.error(err);
