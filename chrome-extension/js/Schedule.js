@@ -3,18 +3,21 @@ class Schedule {
 	/**
 	 *
 	 * @param {object} schedule - original schedule data
+	 * @param {string} date YYYY-MM-DD 複数日にまたがる予定の場合に区別するための日付
 	 */
-	constructor(schedule) {
+	constructor(schedule, date) {
 		this._originalData = schedule;
+		this._date = date;
 	}
 
 	/**
 	 * @param {object} arg
 	 * @param {object} arg._originalData
+	 * @param {string} arg._date YYYY-MM-DD
 	 * @returns {Schedule} aa
 	 */
 	static parse(arg) {
-		return new this(arg._originalData);
+		return new this(arg._originalData, arg._date);
 	}
 
 	/**
@@ -31,7 +34,7 @@ class Schedule {
 		if (this.isValid) {
 			const resid = this._originalData.record.resid;
 			const target = this._originalData.record.target;
-			return `${resid}:${target}`;
+			return `${resid}:${target}:${this._date}`;
 		}
 	}
 
