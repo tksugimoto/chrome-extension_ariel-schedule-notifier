@@ -24,6 +24,7 @@ chrome.storage.local.get({
 			document.getElementById('message').innerText = '';
 
 			fetchSchedule(targetUrl).then(scheduleCache => {
+				document.getElementById('message').innerText = '再取得完了\n（別ユーザーの予定が表示される場合は、スケジュールアプリの先頭ユーザーを自分にしてください）';
 				displayEvents(scheduleCache.dailySchedules, scheduleCache.scheduleById, targetUrl, scheduleCache.lastModified);
 			}).catch(err => {
 				console.error(err);
