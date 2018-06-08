@@ -22,7 +22,7 @@ AlarmUtil.onScheduleNotificationAlarm.addListener(alarm => {
 				const schedule = Schedule.parse(scheduleCache.scheduleById[scheduleId]);
 				const facility = schedule.findFromOptions('施設');
 
-				chrome.notifications.create(scheduleId, {
+				chrome.notifications.create(schedule.id, {
 					title: schedule.title,
 					message: facility || '',
 					contextMessage: schedule.time,
