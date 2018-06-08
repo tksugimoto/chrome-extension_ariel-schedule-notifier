@@ -32,9 +32,9 @@ window.fetchSchedule = (targetUrl) => {
 		throw 'おそらくログインしてない';
 	}).then(json => {
 		const scheduleById = {};
-		for (const event of Object.values(json.events)) {
+		for (const [date, event] of Object.entries(json.events)) {
 			for (const s of event.schedules) {
-				const schedule = new Schedule(s);
+				const schedule = new Schedule(s, date);
 				if (schedule.isValid) {
 					scheduleById[schedule.id] = schedule;
 				}
@@ -46,7 +46,7 @@ window.fetchSchedule = (targetUrl) => {
 			if (date1 < date2) return -1;
 			return 0;
 		}).map(([date, {schedules}]) => {
-			const scheduleIds = schedules.map(s => new Schedule(s)).filter(schedule => schedule.isValid).map(schedule => schedule.id);
+			const scheduleIds = schedules.map(s => new Schedule(s, date)).filter(schedule => schedule.isValid).map(schedule => schedule.id);
 			return {
 				date,
 				scheduleIds,

@@ -50,7 +50,7 @@ window.displayEvents = (dailySchedules, scheduleById, targetUrl, lastModified, o
 		container.append(h1);
 		scheduleIds.forEach(scheduleId => {
 			const schedule = scheduleById[scheduleId];
-			const url = `${targetUrl}aqua/${schedule.resid}/view?target=${date}`;
+			const url = `${targetUrl}aqua/${schedule.resid}/view?target=${schedule.targetDate}`;
 
 			const p = document.createElement('p');
 			p.append(schedule.time);
