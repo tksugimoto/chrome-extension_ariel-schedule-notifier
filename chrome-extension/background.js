@@ -98,6 +98,29 @@ AlarmUtil.onRefreshScheduleAlarm.addListener(() => {
 chrome.runtime.onInstalled.addListener(details => {
 	AlarmUtil.startRefreshScheduleAlarm();
 
+	if (details.reason === 'update') {
+		if (details.previousVersion === '0.5.0') {
+			// 0.5.0 からのアップデートでScheduleのid仕様が変わっているため、新idでも保存し直す
+			chrome.storage.local.get([
+				'scheduleCache',
+			], ({
+				scheduleCache,
+			}) => {
+				if (scheduleCache) {
+					for (const rawSchedule of Object.values(scheduleCache.scheduleById)) {
+						const schedule = Schedule.parse(rawSchedule);
+						scheduleCache.scheduleById[schedule.id] = schedule;
+					}
+
+					chrome.storage.local.set({
+						scheduleCache,
+					});
+				}
+			});
+		}
+		return;
+	}
+
 	if (details.reason === 'install') {
 		chrome.runtime.openOptionsPage();
 	}
