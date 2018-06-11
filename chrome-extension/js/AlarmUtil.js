@@ -81,6 +81,9 @@ const startRefreshScheduleAlarm = () => {
 	alarmParams.set('type', 'refresh-schedule');
 
 	chrome.alarms.create(alarmParams.toString(), {
+		// 現在から60分間の間のランダムな時刻に初回の更新を設定
+		// 拡張の更新が複数ユーザーで同時に発生すると予定取得が短時間に発生しサーバーの負荷となるため散らす
+		when: Date.now() + 1000 * 60 * 60 * Math.random(),
 		periodInMinutes: 60 * 1,
 	});
 };
