@@ -40,6 +40,9 @@ const refreshScheduleNotificationAlarms = (dailySchedules, scheduleById) => {
 			scheduleIds.forEach(scheduleId => {
 				const schedule = scheduleById[scheduleId];
 
+				// 2日以上の（0:00をまたぐ）予定の2日目以降（各日0:00）は通知しない
+				if (schedule.targetDate !== date) return;
+
 				if (schedule.time.match(/^(\d+:\d+) -/)) {
 					const startTime = RegExp.$1;
 					const eventStartDate = new Date(`${date} ${startTime}`);
