@@ -17,6 +17,8 @@ const clearScheduleNotificationAlarms = () => {
 		chrome.alarms.getAll(alarms => {
 			const scheduleAlarms = alarms.filter(alarm => {
 				const alarmParams = new URLSearchParams(alarm.name);
+				// 再通知用alarmはクリアしない
+				if (alarmParams.get('re-notification') === 'true') return false;
 				return alarmParams.get('type') === 'schedule';
 			});
 			const promises = scheduleAlarms.map(clearAlarm);
@@ -70,9 +72,11 @@ const onScheduleNotificationAlarm = {
 			const alarmParams = new URLSearchParams(alarm.name);
 			if (alarmParams.get('type') === 'schedule') {
 				const scheduleId = alarmParams.get('scheduleId');
+				const isFirstTime = alarmParams.get('re-notification') !== 'true';
 				callback({
 					scheduleId,
 					scheduledTime: alarm.scheduledTime,
+					isFirstTime,
 				});
 			}
 		});
@@ -133,6 +137,22 @@ const onClearScheduleNotificationAlarm = {
 };
 
 
+/**
+ * @param {Schedule} schedule
+ * @param {number} when the time value in milliseconds
+ */
+const startReNoticeScheduleNotificationAlarm = (schedule, when) => {
+	const alarmParams = new URLSearchParams();
+	alarmParams.set('type', 'schedule');
+	alarmParams.set('scheduleId', schedule.id);
+	alarmParams.set('re-notification', 'true');
+
+	chrome.alarms.create(alarmParams.toString(), {
+		when,
+	});
+};
+
+
 window.AlarmUtil = {
 	refreshScheduleNotificationAlarms,
 	onScheduleNotificationAlarm,
@@ -140,4 +160,5 @@ window.AlarmUtil = {
 	onRefreshScheduleAlarm,
 	startClearScheduleNotificationAlarm,
 	onClearScheduleNotificationAlarm,
+	startReNoticeScheduleNotificationAlarm,
 };

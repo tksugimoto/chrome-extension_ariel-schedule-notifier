@@ -2,9 +2,11 @@
 
 const ButtonIndex = {
 	OPEN_SCHEDULE: 0,
+	RE_NOTIFICATION: 1,
 };
 
 const MS_5_MINUTES = 1000 * 60 * 5;
+const MS_1_MINUTES = 1000 * 60 * 1;
 
 AlarmUtil.onScheduleNotificationAlarm.addListener(alarm => {
 	const scheduleId = alarm.scheduleId;
@@ -22,6 +24,17 @@ AlarmUtil.onScheduleNotificationAlarm.addListener(alarm => {
 				const schedule = Schedule.parse(scheduleCache.scheduleById[scheduleId]);
 				const facility = schedule.findFromOptions('施設');
 
+				const buttons = [{
+					title: '予定を開く',
+				}];
+
+				if (alarm.isFirstTime) {
+					// TODO: 再通知時刻を変更できるようにする
+					buttons.push({
+						title: '予定開始1分前に再通知',
+					});
+				}
+
 				chrome.notifications.create(schedule.id, {
 					title: schedule.title,
 					message: facility || '',
@@ -29,9 +42,7 @@ AlarmUtil.onScheduleNotificationAlarm.addListener(alarm => {
 					type: 'basic',
 					iconUrl: '/icon/icon128.png',
 					requireInteraction: true,
-					buttons: [{
-						title: '予定を開く',
-					}],
+					buttons,
 				});
 
 				// 10分後に通知を削除する
@@ -75,6 +86,28 @@ chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) =
 					width: 1200,
 					height: 800,
 				});
+			}
+		});
+	} else if (buttonIndex === ButtonIndex.RE_NOTIFICATION) {
+		chrome.notifications.clear(notificationId);
+
+		chrome.storage.local.get([
+			'scheduleCache',
+		], ({
+			scheduleCache,
+		}) => {
+			if (scheduleCache) {
+				const scheduleId = notificationId;
+
+				const schedule = Schedule.parse(scheduleCache.scheduleById[scheduleId]);
+
+				if (schedule.time.match(/^(\d+:\d+) -/)) {
+					const startTime = RegExp.$1;
+					const eventStartDate = new Date(`${schedule.targetDate} ${startTime}`);
+
+					const when = eventStartDate.getTime() - MS_1_MINUTES;
+					AlarmUtil.startReNoticeScheduleNotificationAlarm(schedule, when);
+				}
 			}
 		});
 	}
