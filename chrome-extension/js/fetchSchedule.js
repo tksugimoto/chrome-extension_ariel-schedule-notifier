@@ -12,6 +12,41 @@
 	};
 
 	/**
+	 *
+	 * @param {Date} refreshDate
+	 */
+	const formatRefreshDateTime = refreshDate => {
+		return refreshDate.toLocaleString('ja-JP', {
+			month: '2-digit',
+			day: '2-digit',
+			weekday: 'short',
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+		});
+	};
+
+	const updateStatus = ({
+		refreshSucceeded,
+		refreshDate,
+	}) => {
+		const status = refreshSucceeded ? '更新成功' : '更新失敗';
+		const badgeText = refreshSucceeded ? '' : 'X';
+		const badgeBackgroundColor = refreshSucceeded ? [0, 0, 0, 0] : 'red';
+
+		const extensionName = chrome.runtime.getManifest().name;
+		chrome.browserAction.setTitle({
+			title: `${extensionName}\n${status}\n${formatRefreshDateTime(refreshDate)}`,
+		});
+		chrome.browserAction.setBadgeText({
+			text: badgeText,
+		});
+		chrome.browserAction.setBadgeBackgroundColor({
+			color: badgeBackgroundColor,
+		});
+	};
+
+	/**
 	 * @param {string} targetUrl
 	 */
 	window.fetchSchedule = (targetUrl) => {
@@ -71,6 +106,18 @@
 			AlarmUtil.refreshScheduleNotificationAlarms(dailySchedules, scheduleById);
 
 			return scheduleCache;
+		}).then(scheduleCache => {
+			updateStatus({
+				refreshSucceeded: true,
+				refreshDate: new Date(scheduleCache.lastModified),
+			});
+			return scheduleCache;
+		}).catch(err => {
+			updateStatus({
+				refreshSucceeded: false,
+				refreshDate: new Date,
+			});
+			throw err;
 		});
 	};
 }
