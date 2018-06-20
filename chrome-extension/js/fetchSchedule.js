@@ -12,6 +12,21 @@
 	};
 
 	/**
+	 *
+	 * @param {Date} refreshDate
+	 */
+	const formatRefreshDateTime = refreshDate => {
+		return refreshDate.toLocaleString('ja-JP', {
+			month: '2-digit',
+			day: '2-digit',
+			weekday: 'short',
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+		});
+	};
+
+	/**
 	 * @param {string} targetUrl
 	 */
 	window.fetchSchedule = (targetUrl) => {
@@ -71,6 +86,27 @@
 			AlarmUtil.refreshScheduleNotificationAlarms(dailySchedules, scheduleById);
 
 			return scheduleCache;
+		}).then(scheduleCache => {
+			const extensionName = chrome.runtime.getManifest().name;
+			chrome.browserAction.setTitle({
+				title: `${extensionName}\n更新成功\n${formatRefreshDateTime(new Date(scheduleCache.lastModified))}`,
+			});
+			chrome.browserAction.setBadgeText({
+				text: '',
+			});
+			return scheduleCache;
+		}).catch(err => {
+			const extensionName = chrome.runtime.getManifest().name;
+			chrome.browserAction.setTitle({
+				title: `${extensionName}\n更新失敗\n${formatRefreshDateTime(new Date)}`,
+			});
+			chrome.browserAction.setBadgeText({
+				text: 'X',
+			});
+			chrome.browserAction.setBadgeBackgroundColor({
+				color: 'red',
+			});
+			throw err;
 		});
 	};
 }
