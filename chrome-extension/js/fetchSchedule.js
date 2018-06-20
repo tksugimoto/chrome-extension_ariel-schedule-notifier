@@ -26,6 +26,26 @@
 		});
 	};
 
+	const updateStatus = ({
+		refreshSucceeded,
+		refreshDate,
+	}) => {
+		const status = refreshSucceeded ? '更新成功' : '更新失敗';
+		const badgeText = refreshSucceeded ? '' : 'X';
+		const badgeBackgroundColor = refreshSucceeded ? [0, 0, 0, 0] : 'red';
+
+		const extensionName = chrome.runtime.getManifest().name;
+		chrome.browserAction.setTitle({
+			title: `${extensionName}\n${status}\n${formatRefreshDateTime(refreshDate)}`,
+		});
+		chrome.browserAction.setBadgeText({
+			text: badgeText,
+		});
+		chrome.browserAction.setBadgeBackgroundColor({
+			color: badgeBackgroundColor,
+		});
+	};
+
 	/**
 	 * @param {string} targetUrl
 	 */
@@ -87,24 +107,15 @@
 
 			return scheduleCache;
 		}).then(scheduleCache => {
-			const extensionName = chrome.runtime.getManifest().name;
-			chrome.browserAction.setTitle({
-				title: `${extensionName}\n更新成功\n${formatRefreshDateTime(new Date(scheduleCache.lastModified))}`,
-			});
-			chrome.browserAction.setBadgeText({
-				text: '',
+			updateStatus({
+				refreshSucceeded: true,
+				refreshDate: new Date(scheduleCache.lastModified),
 			});
 			return scheduleCache;
 		}).catch(err => {
-			const extensionName = chrome.runtime.getManifest().name;
-			chrome.browserAction.setTitle({
-				title: `${extensionName}\n更新失敗\n${formatRefreshDateTime(new Date)}`,
-			});
-			chrome.browserAction.setBadgeText({
-				text: 'X',
-			});
-			chrome.browserAction.setBadgeBackgroundColor({
-				color: 'red',
+			updateStatus({
+				refreshSucceeded: false,
+				refreshDate: new Date,
 			});
 			throw err;
 		});
