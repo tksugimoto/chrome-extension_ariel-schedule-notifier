@@ -16,7 +16,9 @@
 		"http://*/",
 		"https://*/"
 	],
-	"options_page": "setting/index.html",
+	"options_ui": {
+		"page": "setting/index.html"
+	},
 	"browser_action": {
 		"default_popup": "schedule/index.html"
 	},
