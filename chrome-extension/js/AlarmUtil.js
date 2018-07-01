@@ -153,7 +153,7 @@ const startReNoticeScheduleNotificationAlarm = (schedule, when) => {
 };
 
 
-window.AlarmUtil = {
+export default {
 	refreshScheduleNotificationAlarms,
 	onScheduleNotificationAlarm,
 	startRefreshScheduleAlarm,

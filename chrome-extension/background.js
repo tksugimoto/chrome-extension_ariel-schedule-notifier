@@ -1,4 +1,6 @@
-/* global Schedule AlarmUtil fetchSchedule */
+import Schedule from '/js/Schedule.js';
+import AlarmUtil from '/js/AlarmUtil.js';
+import fetchSchedule from '/js/fetchSchedule.js';
 
 const ButtonIndex = {
 	OPEN_SCHEDULE: 0,

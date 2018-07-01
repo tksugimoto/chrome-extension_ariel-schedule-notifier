@@ -1,4 +1,5 @@
-/* global fetchSchedule displayEvents */
+import fetchSchedule from '/js/fetchSchedule.js';
+import displayEvents from '/js/displayEvents.js';
 
 const targetUrlInput = document.getElementById('target_url');
 

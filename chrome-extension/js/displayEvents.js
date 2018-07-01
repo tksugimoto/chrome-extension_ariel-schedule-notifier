@@ -37,7 +37,7 @@ const formatDateTime = date => {
  * @param {string} targetUrl
  * @param {number} lastModified
  */
-window.displayEvents = (dailySchedules, scheduleById, targetUrl, lastModified, option = {}) => {
+const displayEvents = (dailySchedules, scheduleById, targetUrl, lastModified, option = {}) => {
 	const lastModifiedElement = document.getElementById(option.lastModifiedElementId || 'lastModified');
 	lastModifiedElement.innerText = `取得日: ${formatDateTime(new Date(lastModified))}`;
 
@@ -81,3 +81,5 @@ window.displayEvents = (dailySchedules, scheduleById, targetUrl, lastModified, o
 		});
 	});
 };
+
+export default displayEvents;

@@ -1,4 +1,5 @@
-/* global Schedule AlarmUtil */
+import Schedule from './Schedule.js';
+import AlarmUtil from './AlarmUtil.js';
 
 /**
  *
@@ -49,7 +50,7 @@ const updateStatus = ({
 /**
  * @param {string} targetUrl
  */
-window.fetchSchedule = (targetUrl) => {
+const fetchSchedule = (targetUrl) => {
 	const params = new URLSearchParams();
 	params.set('exa', 'calendar');
 	params.set('viewId', 'schedule-list/to-json');
@@ -120,3 +121,5 @@ window.fetchSchedule = (targetUrl) => {
 		throw err;
 	});
 };
+
+export default fetchSchedule;

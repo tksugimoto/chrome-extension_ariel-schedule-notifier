@@ -75,3 +75,5 @@ class Schedule {
 		return resultOption ? resultOption.value : null;
 	}
 }
+
+export default Schedule;
