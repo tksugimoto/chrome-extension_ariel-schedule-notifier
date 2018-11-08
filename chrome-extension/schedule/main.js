@@ -42,9 +42,9 @@ chrome.storage.local.get({
 
 		keywordInput.addEventListener('keydown', evt => {
 			if (evt.key === 'Enter') {
-				const keyword = keywordInput.value;
+				const keyword = keywordInput.value.toLocaleLowerCase();
 				container.querySelectorAll('p').forEach(elem => {
-					elem.style.display = elem.innerText.includes(keyword) ? '' : 'none';
+					elem.style.display = elem.innerText.toLocaleLowerCase().includes(keyword) ? '' : 'none';
 				});
 			}
 			if (evt.key === 'Escape') {
