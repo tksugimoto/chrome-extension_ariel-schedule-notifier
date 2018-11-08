@@ -1,4 +1,6 @@
-/* global Schedule fetchSchedule displayEvents */
+import Schedule from '/js/Schedule.js';
+import fetchSchedule from '/js/fetchSchedule.js';
+import displayEvents from '/js/displayEvents.js';
 
 const targetUrlSettingStorageKey = 'target_url';
 chrome.storage.local.get({
