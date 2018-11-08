@@ -35,5 +35,25 @@ chrome.storage.local.get({
 				target.disabled = false;
 			});
 		});
+
+		const container = document.getElementById('schedule_container');
+		const keywordInput = document.getElementById('keyword');
+		keywordInput.focus();
+
+		keywordInput.addEventListener('keydown', evt => {
+			if (evt.key === 'Enter') {
+				const keyword = keywordInput.value;
+				container.querySelectorAll('p').forEach(elem => {
+					elem.style.display = elem.innerText.includes(keyword) ? '' : 'none';
+				});
+			}
+			if (evt.key === 'Escape') {
+				keywordInput.value = '';
+				container.querySelectorAll('p').forEach(elem => {
+					elem.style.display = '';
+				});
+				evt.preventDefault();
+			}
+		});
 	}
 });
